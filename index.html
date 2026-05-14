@@ -136,15 +136,26 @@
 
         .lotto-number {
             display: inline-block;
-            width: 38px;
-            height: 38px;
-            line-height: 38px;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
             border-radius: 50%;
             background-color: #e8eaed;
             color: #202124;
-            margin: 0 5px;
+            margin: 5px;
             font-weight: bold;
             text-align: center;
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: popIn 0.4s ease-out forwards;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         body.dark-mode .lotto-number {
@@ -152,15 +163,38 @@
             color: #ffffff;
         }
 
+        /* 줄 선택 영역 스타일 */
+        #controls {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #row-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
+            background-color: transparent;
+            color: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        body.dark-mode #row-select {
+            border-color: #5f6368;
+        }
+
         /* 🌟 오른쪽 아래 문구 추가 */
         #footer-text {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            font-size: 4rem; /* 로고와 같은 크기 */
+            font-size: 4rem;
             font-weight: bold;
             color: #5f6368;
-            opacity: 0.3; /* 너무 방해되지 않게 투명도 조절 */
+            opacity: 0.8;
+            z-index: 9999;
             pointer-events: none;
         }
 
@@ -178,7 +212,6 @@
     </div>
 
     <div id="controls">
-        <label for="row-select">줄 선택:</label>
         <select id="row-select">
             <option value="1">1줄</option>
             <option value="2">2줄</option>
@@ -224,7 +257,6 @@
         const generateBtn = document.getElementById('generate-btn');
         const rowSelect = document.getElementById('row-select');
         const resultContainer = document.getElementById('result-container');
-        let isFirstTime = true;
 
         generateBtn.addEventListener('click', async () => {
             const rowCount = parseInt(rowSelect.value);
@@ -241,39 +273,18 @@
                 
                 // 한 숫자씩 천천히 나오게 하기
                 for (let j = 0; j < numbers.length; j++) {
-                    await new Promise(resolve => setTimeout(resolve, 300)); // 0.3초 간격
+                    await new Promise(resolve => setTimeout(resolve, 300));
                     const numSpan = document.createElement('span');
                     numSpan.className = 'lotto-number';
                     numSpan.textContent = numbers[j];
                     rowDiv.appendChild(numSpan);
                 }
                 
-                // 줄 사이 간격
                 await new Promise(resolve => setTimeout(resolve, 200));
             }
 
             generateBtn.disabled = false;
             generateBtn.textContent = '번호 뽑기(재시도)';
-        });
-    </script>
-</body>
-</html>              numbers.forEach(num => {
-                        rowHTML += `<span class="lotto-number">${num}</span>`;
-                    });
-                    
-                    rowDiv.innerHTML = rowHTML;
-                    resultContainer.appendChild(rowDiv);
-
-                    // 🌟 3. 마지막 줄이 출력되면 버튼 다시 활성화 및 텍스트 변경
-                    if (i === 4) {
-                        setTimeout(() => {
-                            generateBtn.disabled = false;
-                            isFirstTime = false; // 첫 시도 끝
-                            generateBtn.textContent = '번호 뽑기(재시도)';
-                        }, 600); 
-                    }
-                }, i * 600); 
-            }
         });
     </script>
 </body>
