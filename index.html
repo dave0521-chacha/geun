@@ -163,28 +163,6 @@
             color: #ffffff;
         }
 
-        /* 줄 선택 영역 스타일 */
-        #controls {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #row-select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #dadce0;
-            background-color: transparent;
-            color: inherit;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        body.dark-mode #row-select {
-            border-color: #5f6368;
-        }
-
         /* 🌟 오른쪽 아래 문구 추가 */
         #footer-text {
             position: fixed;
@@ -209,16 +187,6 @@
 
     <div class="logo">
         <span class="c1">L</span><span class="c2">o</span><span class="c3">t</span><span class="c4">t</span><span class="c5">o</span>
-    </div>
-
-    <div id="controls">
-        <select id="row-select">
-            <option value="1">1줄</option>
-            <option value="2">2줄</option>
-            <option value="3">3줄</option>
-            <option value="4">4줄</option>
-            <option value="5" selected>5줄</option>
-        </select>
     </div>
 
     <!-- 🌟 수정된 추첨 버튼 -->
@@ -255,32 +223,26 @@
         }
 
         const generateBtn = document.getElementById('generate-btn');
-        const rowSelect = document.getElementById('row-select');
         const resultContainer = document.getElementById('result-container');
 
         generateBtn.addEventListener('click', async () => {
-            const rowCount = parseInt(rowSelect.value);
             generateBtn.disabled = true;
             generateBtn.textContent = '번호 추첨 중...';
             resultContainer.innerHTML = '';
 
-            for (let i = 0; i < rowCount; i++) {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'lotto-row';
-                resultContainer.appendChild(rowDiv);
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'lotto-row';
+            resultContainer.appendChild(rowDiv);
 
-                const numbers = getLottoNumbers();
-                
-                // 한 숫자씩 천천히 나오게 하기
-                for (let j = 0; j < numbers.length; j++) {
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                    const numSpan = document.createElement('span');
-                    numSpan.className = 'lotto-number';
-                    numSpan.textContent = numbers[j];
-                    rowDiv.appendChild(numSpan);
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, 200));
+            const numbers = getLottoNumbers();
+            
+            // 한 숫자씩 천천히 나오게 하기
+            for (let j = 0; j < numbers.length; j++) {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                const numSpan = document.createElement('span');
+                numSpan.className = 'lotto-number';
+                numSpan.textContent = numbers[j];
+                rowDiv.appendChild(numSpan);
             }
 
             generateBtn.disabled = false;
