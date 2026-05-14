@@ -151,6 +151,21 @@
             background-color: #5f6368;
             color: #ffffff;
         }
+
+        /* 🌟 오른쪽 아래 문구 추가 */
+        #footer-text {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            color: #5f6368;
+            opacity: 0.6;
+            pointer-events: none; /* 클릭 방해 금지 */
+        }
+
+        body.dark-mode #footer-text {
+            color: #9aa0a6;
+        }
     </style>
 </head>
 <body>
