@@ -177,6 +177,17 @@
         <span class="c1">L</span><span class="c2">o</span><span class="c3">t</span><span class="c4">t</span><span class="c5">o</span>
     </div>
 
+    <div id="controls">
+        <label for="row-select">줄 선택:</label>
+        <select id="row-select">
+            <option value="1">1줄</option>
+            <option value="2">2줄</option>
+            <option value="3">3줄</option>
+            <option value="4">4줄</option>
+            <option value="5" selected>5줄</option>
+        </select>
+    </div>
+
     <!-- 🌟 수정된 추첨 버튼 -->
     <button id="generate-btn">번호 뽑기</button>
 
@@ -211,27 +222,42 @@
         }
 
         const generateBtn = document.getElementById('generate-btn');
+        const rowSelect = document.getElementById('row-select');
         const resultContainer = document.getElementById('result-container');
-        let isFirstTime = true; // 첫 시도 여부 확인
+        let isFirstTime = true;
 
-        generateBtn.addEventListener('click', () => {
-            // 🌟 1. 추첨 중 버튼 비활성화 (중복 클릭 방지)
+        generateBtn.addEventListener('click', async () => {
+            const rowCount = parseInt(rowSelect.value);
             generateBtn.disabled = true;
             generateBtn.textContent = '번호 추첨 중...';
-            
-            // 기존 결과 지우기
             resultContainer.innerHTML = '';
 
-            // 🌟 2. 5줄을 순차적으로 띄우기 위한 반복문과 setTimeout
-            for (let i = 0; i < 5; i++) {
-                // i * 600 밀리초(0.6초) 간격으로 실행
-                setTimeout(() => {
-                    const numbers = getLottoNumbers();
-                    const rowDiv = document.createElement('div');
-                    rowDiv.className = 'lotto-row';
-                    
-                    let rowHTML = '';
-                    numbers.forEach(num => {
+            for (let i = 0; i < rowCount; i++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'lotto-row';
+                resultContainer.appendChild(rowDiv);
+
+                const numbers = getLottoNumbers();
+                
+                // 한 숫자씩 천천히 나오게 하기
+                for (let j = 0; j < numbers.length; j++) {
+                    await new Promise(resolve => setTimeout(resolve, 300)); // 0.3초 간격
+                    const numSpan = document.createElement('span');
+                    numSpan.className = 'lotto-number';
+                    numSpan.textContent = numbers[j];
+                    rowDiv.appendChild(numSpan);
+                }
+                
+                // 줄 사이 간격
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
+            generateBtn.disabled = false;
+            generateBtn.textContent = '번호 뽑기(재시도)';
+        });
+    </script>
+</body>
+</html>              numbers.forEach(num => {
                         rowHTML += `<span class="lotto-number">${num}</span>`;
                     });
                     
