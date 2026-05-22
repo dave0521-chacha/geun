@@ -197,16 +197,28 @@ table.excel-grid .col-header {
 /* Cells */
 table.excel-grid td {
     height: 25px;
+    outline: none;
 }
 
-table.excel-grid tr:hover td {
-    background-color: #f9f9f9;
-}
-
-table.excel-grid td.selected {
+table.excel-grid td.excel-cell:focus {
     outline: 2px solid var(--excel-green);
-    outline-offset: -2px;
-    background-color: var(--excel-selection);
+    background-color: white;
+    z-index: 10;
+}
+
+.sort-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    margin-left: 5px;
+    padding: 2px;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.sort-btn:hover {
+    background-color: #ddd;
 }
 
 /* Footer & Tabs */
