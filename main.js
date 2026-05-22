@@ -94,10 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
         data.sort((a, b) => {
             // Specialized Logic for TM_MASTER: Always keep Spare/Obsolete at bottom
             if (currentSheet === 'TM_MASTER') {
-                const statusA = a.status;
-                const statusB = b.status;
-                const isNonOpA = (statusA === '예비품' || statusA === '불용');
-                const isNonOpB = (statusB === '예비품' || statusB === '불용');
+                const typeA = a.type || '';
+                const typeB = b.type || '';
+                const isNonOpA = (typeA === '예비품' || typeA === '불용' || typeA === '불용품');
+                const isNonOpB = (typeB === '예비품' || typeB === '불용' || typeB === '불용품');
 
                 if (!isNonOpA && isNonOpB) return -1; // A(운영중) comes first
                 if (isNonOpA && !isNonOpB) return 1;  // B(운영중) comes first
