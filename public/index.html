@@ -3,289 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>심플 로또 추첨기</title>
-    <style>
-        /* 기본(라이트 모드) 스타일 */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #ffffff;
-            color: #202124;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* 다크 모드 스타일 */
-        body.dark-mode {
-            background-color: #202124;
-            color: #bdc1c6;
-        }
-
-        /* 오른쪽 위 테마 전환 버튼 */
-        #theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            cursor: pointer;
-            background-color: transparent;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 14px;
-            color: inherit;
-            transition: background-color 0.2s;
-        }
-
-        body.dark-mode #theme-toggle {
-            border-color: #5f6368;
-        }
-
-        #theme-toggle:hover {
-            background-color: rgba(150, 150, 150, 0.1);
-        }
-
-        /* 구글 스타일 로고 */
-        .logo {
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-            letter-spacing: -2px;
-        }
-        
-        .c1 { color: #4285F4; } /* Blue */
-        .c2 { color: #EA4335; } /* Red */
-        .c3 { color: #FBBC05; } /* Yellow */
-        .c4 { color: #4285F4; } /* Blue */
-        .c5 { color: #34A853; } /* Green */
-
-        /* 줄 선택 영역 스타일 */
-        #controls {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #row-select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #dadce0;
-            background-color: transparent;
-            color: inherit;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        body.dark-mode #row-select {
-            border-color: #5f6368;
-        }
-
-        /* 🌟 눈에 띄게 변경된 추첨 버튼 */
-        #generate-btn {
-            padding: 15px 35px;
-            font-size: 18px;
-            font-weight: bold;
-            background-color: #4285F4; /* 구글 파란색 */
-            border: none;
-            border-radius: 30px; /* 둥근 캡슐 모양 */
-            color: white;
-            cursor: pointer;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(66, 133, 244, 0.3);
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-        }
-
-        #generate-btn:hover {
-            background-color: #3367D6;
-            box-shadow: 0 6px 10px rgba(66, 133, 244, 0.4);
-        }
-
-        #generate-btn:active {
-            transform: scale(0.96); /* 클릭 시 살짝 작아지는 효과 */
-        }
-
-        /* 추첨 중일 때 버튼 비활성화 스타일 */
-        #generate-btn:disabled {
-            background-color: #a0c1f9;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        body.dark-mode #generate-btn {
-            background-color: #8ab4f8;
-            color: #202124;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-        }
-
-        body.dark-mode #generate-btn:hover {
-            background-color: #aecbfa;
-        }
-
-        body.dark-mode #generate-btn:disabled {
-            background-color: #5f6368;
-            color: #9aa0a6;
-        }
-
-        /* 로또 번호 결과 출력 영역 */
-        #result-container {
-            text-align: center;
-            font-size: 1.2rem;
-            line-height: 2;
-            min-height: 250px; /* 영역 높이 고정 */
-        }
-
-        /* 🌟 순차적으로 나타나는 애니메이션 설정 */
-        .lotto-row {
-            margin: 12px 0;
-            letter-spacing: 2px;
-            opacity: 0; /* 처음엔 투명하게 */
-            transform: translateY(15px); /* 살짝 아래에 위치 */
-            animation: fadeInUp 0.5s ease-out forwards; /* 나타나는 애니메이션 */
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .lotto-number {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            line-height: 60px;
-            border-radius: 50%;
-            background-color: #e8eaed;
-            color: #202124;
-            margin: 5px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.5rem;
-            opacity: 0;
-            transform: scale(0.5);
-            animation: popIn 0.4s ease-out forwards;
-        }
-
-        @keyframes popIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        body.dark-mode .lotto-number {
-            background-color: #5f6368;
-            color: #ffffff;
-        }
-
-        /* 🌟 오른쪽 아래 문구 추가 (크기 줄임) */
-        #footer-text {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 1.5rem; /* 기존 4rem에서 줄임 */
-            font-weight: bold;
-            color: #5f6368;
-            opacity: 0.8;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        body.dark-mode #footer-text {
-            color: #9aa0a6;
-        }
-    </style>
+    <title>TM 현황 관리 - Excel Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
 </head>
-<body>
+<body class="excel-theme">
+    <header class="excel-header">
+        <div class="top-bar">
+            <span class="excel-logo">Excel</span>
+            <span class="file-name">1) TM 현황 DB.xlsx - 저장됨</span>
+            <div class="user-profile">차차바보</div>
+        </div>
+        <div class="ribbon">
+            <nav class="ribbon-tabs">
+                <button class="active">파일</button>
+                <button>홈</button>
+                <button>삽입</button>
+                <button>데이터</button>
+                <button>검토</button>
+                <button>보기</button>
+            </nav>
+            <div class="ribbon-content">
+                <div class="tool-group">
+                    <button id="btn-save"><span class="icon">💾</span>저장</button>
+                    <button id="btn-export"><span class="icon">📤</span>내보내기</button>
+                </div>
+                <div class="tool-group">
+                    <button id="btn-filter"><span class="icon">🔍</span>필터</button>
+                    <button id="btn-sort"><span class="icon">↕️</span>정렬</button>
+                </div>
+                <div class="tool-group">
+                    <button id="btn-add-row"><span class="icon">➕</span>행 추가</button>
+                </div>
+            </div>
+        </div>
+        <div class="formula-bar">
+            <div class="cell-address" id="cell-address">A1</div>
+            <div class="formula-input">
+                <span class="fx-icon">fx</span>
+                <input type="text" id="formula-input" readonly>
+            </div>
+        </div>
+    </header>
 
-    <button id="theme-toggle">다크 모드</button>
+    <main class="excel-body">
+        <div class="grid-container" id="grid-container">
+            <!-- Dynamic Grid Table will be injected here -->
+        </div>
+    </main>
 
-    <div class="logo">
-        <span class="c1">L</span><span class="c2">o</span><span class="c3">t</span><span class="c4">t</span><span class="c5">o</span>
-    </div>
+    <footer class="excel-footer">
+        <div class="sheet-tabs" id="sheet-tabs">
+            <!-- Sheet tabs will be injected here -->
+        </div>
+        <div class="status-bar">
+            <div class="status-left">준비 | 차차바보 모드</div>
+            <div class="status-right">
+                <span>100%</span>
+                <input type="range" min="50" max="200" value="100">
+            </div>
+        </div>
+    </footer>
 
-    <div id="controls">
-        <select id="row-select">
-            <option value="1">1줄</option>
-            <option value="2">2줄</option>
-            <option value="3">3줄</option>
-            <option value="4">4줄</option>
-            <option value="5" selected>5줄</option>
-        </select>
-    </div>
-
-    <!-- 🌟 수정된 추첨 버튼 -->
-    <button id="generate-btn">번호 뽑기</button>
-
-    <div id="result-container"></div>
-
-    <div id="footer-text">차차바보</div>
-
-    <script>
-        // 다크모드/화이트모드 전환
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const body = document.body;
-
-        themeToggleBtn.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            if (body.classList.contains('dark-mode')) {
-                themeToggleBtn.textContent = '라이트 모드';
-            } else {
-                themeToggleBtn.textContent = '다크 모드';
-            }
-        });
-
-        // 1~45 사이 번호 6개 추출
-        function getLottoNumbers() {
-            const numbers = [];
-            while (numbers.length < 6) {
-                const num = Math.floor(Math.random() * 45) + 1;
-                if (!numbers.includes(num)) {
-                    numbers.push(num);
-                }
-            }
-            return numbers.sort((a, b) => a - b);
-        }
-
-        const generateBtn = document.getElementById('generate-btn');
-        const rowSelect = document.getElementById('row-select');
-        const resultContainer = document.getElementById('result-container');
-
-        generateBtn.addEventListener('click', async () => {
-            const rowCount = parseInt(rowSelect.value);
-            generateBtn.disabled = true;
-            generateBtn.textContent = '번호 추첨 중...';
-            resultContainer.innerHTML = '';
-
-            for (let i = 0; i < rowCount; i++) {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'lotto-row';
-                resultContainer.appendChild(rowDiv);
-
-                const numbers = getLottoNumbers();
-                
-                // 한 숫자씩 천천히 나오게 하기
-                for (let j = 0; j < numbers.length; j++) {
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                    const numSpan = document.createElement('span');
-                    numSpan.className = 'lotto-number';
-                    numSpan.textContent = numbers[j];
-                    rowDiv.appendChild(numSpan);
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, 200));
-            }
-
-            generateBtn.disabled = false;
-            generateBtn.textContent = '번호 뽑기(재시도)';
-        });
-    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
