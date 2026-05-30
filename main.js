@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = sheetsData[currentSheet];
         const keys = data.length > 0 ? Object.keys(data[0]) : ['Empty'];
         
-        let html = `<table class="excel-grid">`;
+        let html = `<table class="google-grid">`;
         
         // Headers
         html += `<thead><tr><th class="row-number"></th>`;

@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TM 현황 관리 - Excel Edition</title>
+    <title>TM 현황 관리 - Google Sheets Edition</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
 </head>
-<body class="excel-theme">
-    <header class="excel-header">
+<body class="google-theme">
+    <header class="google-header">
         <div class="top-bar">
-            <span class="excel-logo">Excel</span>
+            <div class="app-logo">
+                <span class="icon">📊</span>
+                <span>Sheets</span>
+            </div>
             <span class="file-name">1) TM 현황 DB.xlsx</span>
-            <div class="user-profile">차차바보</div>
+            <div class="user-profile">차</div>
         </div>
         <div class="formula-bar">
             <div class="cell-address" id="cell-address">A1</div>
@@ -23,18 +26,18 @@
         </div>
     </header>
 
-    <main class="excel-body">
+    <main class="app-body">
         <div class="grid-container" id="grid-container">
             <!-- Dynamic Grid Table will be injected here -->
         </div>
     </main>
 
-    <footer class="excel-footer">
+    <footer class="app-footer">
         <div class="sheet-tabs" id="sheet-tabs">
             <!-- Sheet tabs will be injected here -->
         </div>
         <div class="status-bar">
-            <div class="status-left">준비 | 차차바보 모드</div>
+            <div class="status-left">준비 | 구글 스타일 모드</div>
             <div class="status-right">
                 <span>100%</span>
                 <input type="range" min="50" max="200" value="100">
