@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sheetTabsContainer = document.getElementById('sheet-tabs');
     const cellAddressDisplay = document.getElementById('cell-address');
     const formulaInput = document.getElementById('formula-input');
-    const ribbonButtons = document.querySelectorAll('.ribbon-tabs button');
 
     // State
     let currentSheet = 'TM_MASTER';
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return name;
     }
 
-    // Sorting Logic with Status Prioritization
+    // Sorting Logic
     function handleSort(key) {
         if (sortConfig.key === key) {
             sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
@@ -92,23 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = sheetsData[currentSheet];
         data.sort((a, b) => {
-            // Specialized Logic for TM_MASTER: Always keep Spare/Obsolete at bottom
             if (currentSheet === 'TM_MASTER') {
                 const typeA = a.type || '';
                 const typeB = b.type || '';
                 const isNonOpA = (typeA === '예비품' || typeA === '불용' || typeA === '불용품');
                 const isNonOpB = (typeB === '예비품' || typeB === '불용' || typeB === '불용품');
 
-                if (!isNonOpA && isNonOpB) return -1; // A(운영중) comes first
-                if (isNonOpA && !isNonOpB) return 1;  // B(운영중) comes first
-                
-                // If both are Non-Op, or both are Operational, proceed to normal key sort
+                if (!isNonOpA && isNonOpB) return -1;
+                if (isNonOpA && !isNonOpB) return 1;
             }
 
             let valA = a[key];
             let valB = b[key];
 
-            // Handle numbers
             const numA = parseFloat(valA);
             const numB = parseFloat(valB);
             if (!isNaN(numA) && !isNaN(numB)) {
@@ -148,11 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         html += `</tr></thead>`;
 
-        // Row 1: Sort Buttons
+        // Row 1: Keys/Sort
         html += `<tr><td class="row-number">1</td>`;
         keys.forEach(key => {
-            const sortIcon = sortConfig.key === key ? (sortConfig.direction === 'asc' ? '🔼' : '🔽') : '↕️';
-            html += `<td style="background-color: #f3f3f3; font-weight: bold; text-align: center;">
+            const sortIcon = sortConfig.key === key ? (sortConfig.direction === 'asc' ? '▴' : '▾') : '↕';
+            html += `<td style="background-color: #f8f9fa; font-weight: 500; text-align: center; color: #5f6368;">
                         ${key}
                         <button class="sort-btn" data-key="${key}">${sortIcon}</button>
                      </td>`;
@@ -169,11 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentSheet === 'TM_MASTER' && (key === 'riskGrade' || key === 'totalRiskScore')) {
                     const gradeStr = String(row['riskGrade'] || '');
                     const level = gradeStr.split(' ')[0];
-                    if (level === '5') cellStyle = 'background-color: #ffcccc; color: #cc0000; font-weight: bold;';
-                    else if (level === '4') cellStyle = 'background-color: #fff4cc; color: #cc9900;';
+                    if (level === '5') cellStyle = 'background-color: #fde2e1; color: #b71c1c; font-weight: 500;';
+                    else if (level === '4') cellStyle = 'background-color: #fff4e5; color: #e65100; font-weight: 500;';
                 }
 
-                html += `<td class="excel-cell" 
+                html += `<td class="grid-cell" 
                             contenteditable="true"
                             data-row="${rowIndex}" 
                             data-key="${key}"
@@ -184,9 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Filler
-        for (let i = data.length + 2; i <= 40; i++) {
+        for (let i = data.length + 2; i <= 50; i++) {
             html += `<tr><td class="row-number">${i}</td>`;
-            keys.forEach(() => html += `<td class="excel-cell" contenteditable="true"></td>`);
+            keys.forEach(() => html += `<td class="grid-cell" contenteditable="true"></td>`);
             html += `</tr>`;
         }
 
@@ -201,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-        document.querySelectorAll('.excel-cell').forEach(cell => {
+        document.querySelectorAll('.grid-cell').forEach(cell => {
             cell.onfocus = () => {
                 if (selectedCell) selectedCell.classList.remove('selected');
                 selectedCell = cell;
@@ -218,14 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     }
-
-    // Ribbon
-    ribbonButtons.forEach(btn => {
-        btn.onclick = () => {
-            ribbonButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        };
-    });
 
     renderTabs();
     renderGrid();
